@@ -103,10 +103,18 @@ const Page = () => {
                   <p className="text-gray-600 text-sm">
                     {chapter.chapterContent.length} Lectures •{" "}
                     {/* {calculateTime(chapter)} */}
-                    {humanizeDuration(chapter.chapterContent.reduce((acc,item) => acc + item.lectureDuration,0 ) * 60 * 1000,{
-                      units:["h","m"],
-                      round:true
-                    })}
+                    {humanizeDuration(
+                      chapter.chapterContent.reduce(
+                        (acc, item) => acc + item.lectureDuration,
+                        0
+                      ) *
+                        60 *
+                        1000,
+                      {
+                        units: ["h", "m"],
+                        round: true,
+                      }
+                    )}
                   </p>
                 </div>
 
@@ -225,19 +233,22 @@ const Page = () => {
             <li>⭐ {rating.toFixed(1)} Average Rating</li>
             <li>
               ⏱️{" "}
-               {course
-    ? humanizeDuration(
-        course.courseContent.reduce(
-          (acc, c) =>
-            acc +
-            c.chapterContent.reduce((sum, l) => sum + l.lectureDuration, 0),
-          0
-        ) *
-          60 *
-          1000,
-        { units: ["h", "m"], round: true }
-      )
-    : "N/A"}
+              {course
+                ? humanizeDuration(
+                    course.courseContent.reduce(
+                      (acc, c) =>
+                        acc +
+                        c.chapterContent.reduce(
+                          (sum, l) => sum + l.lectureDuration,
+                          0
+                        ),
+                      0
+                    ) *
+                      60 *
+                      1000,
+                    { units: ["h", "m"], round: true }
+                  )
+                : "N/A"}
             </li>
           </ul>
 
