@@ -4,6 +4,8 @@ import { connectDB } from "@/lib/dbConnect";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  console.log("post success");
+  
   try {
     await connectDB();
     const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET || "");
