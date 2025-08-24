@@ -9,16 +9,32 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/express": "^1.7.24",
+    "@clerk/nextjs": "^6.31.3",
+    "cloudinary": "^2.7.0",
+    "humanize-duration": "^3.33.0",
+    "lucide-react": "^0.540.0",
+    "mongoose": "^8.18.0",
+    "motion": "^12.23.12",
+    "next": "15.4.6",
+    "quill": "^2.0.3",
+    "rc-progress": "^4.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.4.6"
+    "react-simple-star-rating": "^5.1.7",
+    "react-youtube": "^10.1.0",
+    "stripe": "^18.4.0",
+    "svix": "^1.42.0",
+    "uniqid": "^5.4.0",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "@types/uniqid": "^5.3.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
