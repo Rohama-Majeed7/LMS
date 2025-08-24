@@ -225,21 +225,19 @@ const Page = () => {
             <li>⭐ {rating.toFixed(1)} Average Rating</li>
             <li>
               ⏱️{" "}
-              {humanizeDuration(
-                course &&
-                  course?.courseContent.reduce(
-                    (acc, c) =>
-                      acc +
-                      c.chapterContent.reduce(
-                        (sum, l) => sum + l.lectureDuration,
-                        0
-                      ),
-                    0
-                  ) *
-                    60 *
-                    1000,
-                { units: ["h", "m"], round: true }
-              )}
+               {course
+    ? humanizeDuration(
+        course.courseContent.reduce(
+          (acc, c) =>
+            acc +
+            c.chapterContent.reduce((sum, l) => sum + l.lectureDuration, 0),
+          0
+        ) *
+          60 *
+          1000,
+        { units: ["h", "m"], round: true }
+      )
+    : "N/A"}
             </li>
           </ul>
 
