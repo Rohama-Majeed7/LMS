@@ -6,7 +6,21 @@ import uniqid from "uniqid";
 import "quill/dist/quill.snow.css";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
-import { Course } from "@/assets/assets";
+interface Lecture {
+  lectureId: string;
+  lectureTitle: string;
+  lectureDuration: string;
+  lectureUrl: string;
+  isPreviewFree: boolean;
+}
+
+interface Chapter {
+  chapterId: string;
+  chapterTitle: string;
+  chapterContent: Lecture[];
+  collapsed: boolean;
+  chapterOrder: number;
+}
 
 const Page = () => {
   const qillRef = useRef<any>(null);
@@ -16,12 +30,12 @@ const Page = () => {
   const [coursePrice, setCoursePrice] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [image, setImage] = useState<File | null>(null);
-  const [chapters, setChapters] = useState<any[]>([]);
+  const [chapters, setChapters] = useState<Chapter[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const [currentChapterId, setCurrentChapterId] = useState<string | null>(null);
   const [showLectures, setShowLectures] = useState<Record<number, boolean>>({});
 
-  const [lectureDetails, setLectureDetails] = useState({
+  const [lectureDetails, setLectureDetails] = useState<Lecture>({
     lectureId: "",
     lectureTitle: "",
     lectureDuration: "",
