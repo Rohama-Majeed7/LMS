@@ -4,8 +4,10 @@ import CoursesSection from "@/components/student/CoursesSection";
 import Hero from "@/components/student/Hero";
 import Testimonials from "@/components/student/Testimonial";
 import React from "react";
-
+import { currentUser } from "@clerk/nextjs/server";
 const page = () => {
+  console.log(currentUser);
+  
   return (
     <>
       <Hero />
