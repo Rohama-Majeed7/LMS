@@ -74,10 +74,14 @@
 //   }
 // }
 
+// app/api/clerk/route.ts
 import { NextResponse } from "next/server";
 
-export async function POST() {
-  console.log("Webhook hit!");
+export async function POST(req: Request) {
+  console.log("req:",req);
+  
+  console.log("✅ Clerk webhook received");
   return NextResponse.json({ ok: true });
 }
+
 
