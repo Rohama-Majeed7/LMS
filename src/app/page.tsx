@@ -6,7 +6,7 @@ import Testimonials from "@/components/student/Testimonial";
 import React from "react";
 import { currentUser } from "@clerk/nextjs/server";
 const page = () => {
-  console.log(currentUser);
+  console.log("user:",currentUser);
   
   return (
     <>
