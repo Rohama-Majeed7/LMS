@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       "img.clerk.com",   // ✅ since you’re also loading Clerk images
     ],
   },
+  
 };
 
 export default nextConfig;
