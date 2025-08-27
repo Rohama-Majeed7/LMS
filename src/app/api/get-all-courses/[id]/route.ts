@@ -3,18 +3,14 @@ import { NextRequest } from "next/server";
 import Course from "@/models/Course.model";
 import { connectDB } from "@/lib/dbConnect";
 
-// 👇 Explicitly type the context argument
-interface Context {
-  params: {
-    id: string;
-  };
-}
-
-export async function GET(req: NextRequest, context: Context) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } } // 👈 inline typing, no custom interface
+) {
   await connectDB();
 
   try {
-    const { id } = context.params; // ✅ typed correctly
+    const { id } = params;
 
     const courseData = await Course.findById(id).populate({ path: "educator" });
 
@@ -22,7 +18,7 @@ export async function GET(req: NextRequest, context: Context) {
       return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 
-    // Remove lectureUrl if not free preview
+    // Hide lectureUrl if not free preview
     courseData.courseContent.forEach((chapter: any) => {
       chapter.chapterContent.forEach((lecture: any) => {
         if (!lecture.isPreviewFree) {
