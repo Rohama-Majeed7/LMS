@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET(req: Request) {
   const { userId } = await auth();
   try {
-    const educatorCourses = await Course.find({ userId });
+    const educatorCourses = await Course.find({ educator:userId });
     if (educatorCourses.length === 0) {
       return NextResponse.json(
         { messgae: "No Course of this educator" },

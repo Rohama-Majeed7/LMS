@@ -4,6 +4,7 @@ import uniqid from "uniqid";
 import "quill/dist/quill.snow.css";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
+import axios from "axios";
 interface Lecture {
   lectureId: string;
   lectureTitle: string;
@@ -120,7 +121,13 @@ const Page = () => {
     );
   };
 
-  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    const res = await axios.post("/api/add-course",{
+      courseTitle,
+      coursePrice,
+      discount,
+      
+    })
     e.preventDefault();
   };
 
