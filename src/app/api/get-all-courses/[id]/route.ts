@@ -1,15 +1,20 @@
-import Course from "@/models/Course.model";
 import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import Course from "@/models/Course.model";
 import { connectDB } from "@/lib/dbConnect";
 
-export async function GET(
-  req: Request,
-  context: { params: { id: string } } // ✅ type context instead of params
-) {
+// 👇 Explicitly type the context argument
+interface Context {
+  params: {
+    id: string;
+  };
+}
+
+export async function GET(req: NextRequest, context: Context) {
   await connectDB();
 
   try {
-    const { id } = context.params; // ✅ now works
+    const { id } = context.params; // ✅ typed correctly
 
     const courseData = await Course.findById(id).populate({ path: "educator" });
 
@@ -17,7 +22,7 @@ export async function GET(
       return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 
-    // Clean preview URLs
+    // Remove lectureUrl if not free preview
     courseData.courseContent.forEach((chapter: any) => {
       chapter.chapterContent.forEach((lecture: any) => {
         if (!lecture.isPreviewFree) {
@@ -31,7 +36,7 @@ export async function GET(
       { status: 200 }
     );
   } catch (error) {
-    console.error("❌ Error fetching single Course:", error);
+    console.error("❌ Error fetching single course:", error);
     return NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
