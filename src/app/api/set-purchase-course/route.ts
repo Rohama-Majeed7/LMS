@@ -26,7 +26,9 @@ export async function POST(req: Request) {
       ).toFixed(2),
     };
     const newPurchaseData = await Purchase.create(purchaseData);
-    const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY || "");
+    const stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: "2024-06-20" as any, // ✅ always pin version
+    });
     const currency = process.env.CURRENCY?.toLowerCase();
 
     const list_items = [
@@ -41,12 +43,12 @@ export async function POST(req: Request) {
         quantity: 1,
       },
     ];
-    const sessions:any = stripeInstance.checkout.sessions.create({
+    const sessions: any = stripeInstance.checkout.sessions.create({
       success_url: ``,
       cancel_url: ``,
       line_items: list_items,
       mode: "payment",
-      metadata:{
+      metadata: {
         purchaseId: newPurchaseData._id.toString() || "",
       },
     });
