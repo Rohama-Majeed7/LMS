@@ -1,13 +1,20 @@
 import { create } from "zustand";
-import { Course } from "@/assets/assets";
-
 // ✅ Define store type
 interface AuthState {
-  isEducator:boolean;
+  isEducator: boolean;
+  token: string | null;
+  setToken: (token: string | null) => void;
 }
 
 // ✅ Zustand store
 export const useAuthStore = create<AuthState>((set) => ({
-  isEducator:true,
-  setEducator: (educator:boolean) => set({ isEducator:educator }),
+  isEducator: true,
+  token: null,
+  setEducator: (educator: boolean) => set({ isEducator: educator }),
+  setToken: (token: string | null) => {
+    set((state) =>{
+    console.log("zustand new token:", token);
+     return {token}
+    });
+  },
 }));

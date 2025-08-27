@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import uniqid from "uniqid";
-// import Quill from "quill";
-
 import "quill/dist/quill.snow.css";
 import Image from "next/image";
 import { assets } from "@/assets/assets";

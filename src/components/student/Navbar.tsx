@@ -16,14 +16,12 @@ export default function Navbar() {
   const { user } = useUser();
   const path = usePathname();
   const pathExists = path.includes("educator");
-  const { isEducator } = useAuthStore();
+  const { isEducator, token } = useAuthStore();
   const navigate = useRouter();
 
   return (
     <nav
-      className={`shadow-md ${
-        pathExists ? "bg-white hidden" : "bg-[#1A2A80]"
-      }`}
+      className={`shadow-md ${pathExists ? "bg-white hidden" : "bg-[#1A2A80]"}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
@@ -94,17 +92,20 @@ export default function Navbar() {
           >
             <div className="px-4 py-3 flex flex-col gap-3">
               {user ? (
-              <UserButton />
-            ) : (
-              <Link
-                href={"/sign-in"}
-                className="px-4 py-2 rounded-lg bg-[#3B38A0] text-white hover:bg-[#7A85C1] transition"
+                <UserButton />
+              ) : (
+                <Link
+                  href={"/sign-in"}
+                  className="px-4 py-2 rounded-lg bg-[#3B38A0] text-white hover:bg-[#7A85C1] transition"
+                >
+                  Create Account
+                </Link>
+              )}
+              <button
+                onClick={() => navigate.push("/educator")}
+                className="text-left text-[#3B38A0] hover:text-[#B2B0E8]"
               >
-                Create Account
-              </Link>
-            )}
-              <button onClick={() => navigate.push("/educator")} className="text-left text-[#3B38A0] hover:text-[#B2B0E8]">
-              {user ?  "Educator Dashboard" :"Become Educator"}
+                {user ? "Educator Dashboard" : "Become Educator"}
               </button>
               <Link
                 href="/student/my-enrollments"
@@ -112,7 +113,6 @@ export default function Navbar() {
               >
                 My Enrollments
               </Link>
-
             </div>
           </motion.div>
         </AnimatePresence>

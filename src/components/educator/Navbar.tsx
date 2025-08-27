@@ -5,8 +5,9 @@ import React from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
-const Navbar = () => {
+const Navbar = async () => {
   const { user } = useUser();
+  
 
   return (
     <nav className="bg-[#1A2A80] text-white w-full px-6 py-4 shadow-md">
