@@ -1,5 +1,5 @@
 // middleware.ts
-import { clerkClient, clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 const isPublicRoute = createRouteMatcher([
@@ -7,23 +7,35 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
 ]);
 
-export default clerkMiddleware(async(auth, req) => {
-  // Public routes ko allow
+export default clerkMiddleware(async (auth, req) => {
+  // const { pathname } = req.nextUrl;
+
+  // Allow public routes
   if (isPublicRoute(req)) return;
 
-  // Protect rest
+  // Require authentication
   auth.protect();
 
-const { pathname } = req.nextUrl;
-const {userId} = await auth()
-const client = await clerkClient()
-const response =await client.users.getUser(userId || "")
-  // Agar educator routes access kar raha hai
-  if (pathname.startsWith("/educator")) {
-    if (response.publicMetadata.role !== "educator") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-  }
+  // const { userId } = auth(); 
+
+  // if (!userId) {
+  //   return NextResponse.redirect(new URL("/sign-in", req.url));
+  // }
+
+  // // Check educator role
+  // if (pathname.startsWith("/educator")) {
+  //   try {
+  //     const user = await clerkClient.users.getUser(userId);
+
+  //     if (user.publicMetadata.role !== "educator") {
+  //       return NextResponse.redirect(new URL("/", req.url));
+  //     }
+  //   } catch (err) {
+  //     console.error("❌ Clerk user fetch failed:", err);
+  //     return NextResponse.redirect(new URL("/sign-in", req.url));
+  //   }
+  // }
+
   return NextResponse.next();
 });
 
