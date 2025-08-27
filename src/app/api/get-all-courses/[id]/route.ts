@@ -4,12 +4,12 @@ import { connectDB } from "@/lib/dbConnect";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } } // 👈 params come from here
+  context: { params: { id: string } } // ✅ type context instead of params
 ) {
   await connectDB();
 
   try {
-    const { id } = params; // ✅ access id
+    const { id } = context.params; // ✅ now works
 
     const courseData = await Course.findById(id).populate({ path: "educator" });
 
@@ -17,7 +17,7 @@ export async function GET(
       return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 
-    // Clean preview
+    // Clean preview URLs
     courseData.courseContent.forEach((chapter: any) => {
       chapter.chapterContent.forEach((lecture: any) => {
         if (!lecture.isPreviewFree) {
