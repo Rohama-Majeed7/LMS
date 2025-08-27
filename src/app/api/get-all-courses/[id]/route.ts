@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import Course from "@/models/Course.model";
-import { connectDB } from "@/lib/dbConnect";
-
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } } // 👈 inline typing, no custom interface
-) {
+import { connectDB } from "@/lib/dbConnect"
+export async function GET(req: Request,
+  context: { params: Promise<{ id: string }> }) {
   await connectDB();
 
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     const courseData = await Course.findById(id).populate({ path: "educator" });
 
@@ -18,7 +15,6 @@ export async function GET(
       return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 
-    // Hide lectureUrl if not free preview
     courseData.courseContent.forEach((chapter: any) => {
       chapter.chapterContent.forEach((lecture: any) => {
         if (!lecture.isPreviewFree) {
