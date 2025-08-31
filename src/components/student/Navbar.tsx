@@ -10,15 +10,23 @@ import { motion, AnimatePresence } from "framer-motion";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
+import { before } from "node:test";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
   const path = usePathname();
   const pathExists = path.includes("educator");
-  const { isEducator, token } = useAuthStore();
+  const { isEducator, setEducator } = useAuthStore();
   const navigate = useRouter();
-
+  const becomeEducator = () => {
+    setEducator();
+    if (user?.publicMetadata.role === "educator" && isEducator) {
+      navigate.push("/educator");
+    } else {
+      navigate.push("/");
+    }
+  };
   return (
     <nav
       className={`shadow-md ${pathExists ? "bg-white hidden" : "bg-[#1A2A80]"}`}
@@ -43,7 +51,7 @@ export default function Navbar() {
             {user && (
               <>
                 <button
-                  onClick={() => navigate.push("/educator")}
+                  onClick={becomeEducator}
                   className="text-white hover:text-[#B2B0E8]"
                 >
                   {isEducator ? "Educator Dashboard" : "Become Educator"}

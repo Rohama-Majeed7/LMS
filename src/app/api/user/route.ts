@@ -4,6 +4,8 @@ import { connectDB } from "@/lib/dbConnect";
 import User from "@/models/User.model";
 
 export async function POST(req: Request) {
+  await connectDB();
+
   try {
     const payload = await req.text();
     const svix_id = req.headers.get("svix-id") as string;
@@ -11,7 +13,10 @@ export async function POST(req: Request) {
     const svix_signature = req.headers.get("svix-signature") as string;
 
     if (!svix_id || !svix_timestamp || !svix_signature) {
-      return NextResponse.json({ message: "Missing svix headers" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Missing svix headers" },
+        { status: 400 }
+      );
     }
 
     const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET!);
@@ -22,7 +27,6 @@ export async function POST(req: Request) {
     }) as any;
 
     const { data, type } = evt;
-    await connectDB();
 
     if (type === "user.created") {
       await User.create({
@@ -54,7 +58,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Webhook error" }, { status: 400 });
   }
 }
-
-
-
-

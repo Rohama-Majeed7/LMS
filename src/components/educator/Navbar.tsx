@@ -5,7 +5,7 @@ import React from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
-const Navbar = async () => {
+const Navbar = () => {
   const { user } = useUser();
   
 

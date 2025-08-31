@@ -4,7 +4,8 @@ import uniqid from "uniqid";
 import "quill/dist/quill.snow.css";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
-import axios from "axios";
+import { useUser } from "@clerk/nextjs";
+import { axiosInstance } from "@/lib/axios";
 interface Lecture {
   lectureId: string;
   lectureTitle: string;
@@ -17,7 +18,6 @@ interface Chapter {
   chapterId: string;
   chapterTitle: string;
   chapterContent: Lecture[];
-  collapsed: boolean;
   chapterOrder: number;
 }
 
@@ -28,12 +28,12 @@ const Page = () => {
   const [courseTitle, setCourseTitle] = useState("");
   const [coursePrice, setCoursePrice] = useState(0);
   const [discount, setDiscount] = useState(0);
+  const [courseDescription, setCourseDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [chapters, setChapters] = useState<Chapter[]>([]);
   const [showPopup, setShowPopup] = useState(false);
   const [currentChapterId, setCurrentChapterId] = useState<string | null>(null);
   const [showLectures, setShowLectures] = useState<Record<number, boolean>>({});
-
   const [lectureDetails, setLectureDetails] = useState<Lecture>({
     lectureId: "",
     lectureTitle: "",
@@ -41,13 +41,19 @@ const Page = () => {
     lectureUrl: "",
     isPreviewFree: false,
   });
-
- useEffect(() => {
+  const [imgUrl, setImgUrl] = useState<any>();
+  const { user } = useUser();
+  useEffect(() => {
     (async () => {
       if (!qillRef.current && editorRef.current) {
         const Quill = (await import("quill")).default; // ✅ lazy import
         qillRef.current = new Quill(editorRef.current, {
           theme: "snow",
+        });
+
+        // ✅ Listen to changes and update state
+        qillRef.current.on("text-change", () => {
+          setCourseDescription(qillRef.current.root.innerHTML);
         });
       }
     })();
@@ -68,7 +74,6 @@ const Page = () => {
         chapterId: uniqid(),
         chapterTitle: title,
         chapterContent: [],
-        collapsed: false,
         chapterOrder:
           chapters.length > 0 ? chapters.slice(-1)[0].chapterOrder + 1 : 1,
       };
@@ -120,15 +125,42 @@ const Page = () => {
       )
     );
   };
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (!file) {
+      alert("Please select an image");
+      return;
+    }
+    setImage(file);
 
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      setImgUrl(reader.result);
+    };
+  };
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-    const res = await axios.post("/api/add-course",{
+    e.preventDefault();
+
+    const courseData = {
       courseTitle,
+      courseDescription,
+      courseThumbnail: imgUrl,
       coursePrice,
       discount,
-      
-    })
-    e.preventDefault();
+      isPublished: true,
+      courseContent: chapters,
+      educator: user?.id,
+    };
+    console.log("courseData:", courseData);
+
+    const res = await axiosInstance.post("add-course", courseData);
+    if (res.status === 200) {
+      alert(res.data.message);
+    } else {
+      alert("Something went wrong");
+    }
   };
 
   return (
@@ -211,9 +243,7 @@ const Page = () => {
               <input
                 type="file"
                 id="thumbnailImage"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setImage(e.target.files ? e.target.files[0] : null)
-                }
+                onChange={handleImage}
                 accept="image/*"
                 hidden
               />

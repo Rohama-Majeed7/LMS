@@ -1,24 +1,25 @@
 import mongoose from "mongoose";
-const lectureSchema = new mongoose.Schema({
-  lectureId: {
-    type: String,
+import User from "@/models/User.model";
+const lectureSchema = new mongoose.Schema(
+  {
+    lectureId: {
+      type: String,
+    },
+    lectureTitle: {
+      type: String,
+    },
+    lectureDuration: {
+      type: Number,
+    },
+    lectureUrl: {
+      type: String,
+    },
+    isPreviewFree: {
+      type: Boolean,
+    },
   },
-  lectureTitle: {
-    type: String,
-  },
-  lectureDuration: {
-    type: Number,
-  },
-  lectureUrl: {
-    type: String,
-  },
-  isPreviewFree: {
-    type: Boolean,
-  },
-  lectureOrder: {
-    type: Number,
-  },
-},{_id:false});
+  { _id: false }
+);
 const chapterSchema = new mongoose.Schema(
   {
     chapterId: {
@@ -43,7 +44,7 @@ const courseSchema = new mongoose.Schema(
     },
     courseDescription: {
       type: String,
-      required: true,
+      // required: true,
     },
     courseThumbnail: {
       type: String,
@@ -62,7 +63,7 @@ const courseSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    chapterContent: [chapterSchema],
+    courseContent: [chapterSchema],
     courseRatings: [
       { userId: { type: String }, rating: { type: Number, min: 1, max: 5 } },
     ],

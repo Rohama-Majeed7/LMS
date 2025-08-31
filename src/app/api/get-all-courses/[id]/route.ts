@@ -1,18 +1,24 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import Course from "@/models/Course.model";
-import { connectDB } from "@/lib/dbConnect"
-export async function GET(req: Request,
-  context: { params: Promise<{ id: string }> }) {
+import { connectDB } from "@/lib/dbConnect";
+import User from "@/models/User.model";
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   await connectDB();
 
   try {
     const { id } = await context.params;
 
-    const courseData = await Course.findById(id).populate({ path: "educator" });
+    const courseData = await Course.findById(id).populate("educator");
 
     if (!courseData) {
-      return NextResponse.json({ message: "Course not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Course not found" },
+        { status: 404 }
+      );
     }
 
     courseData.courseContent.forEach((chapter: any) => {

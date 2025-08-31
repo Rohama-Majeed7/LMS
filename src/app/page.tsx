@@ -12,13 +12,13 @@ const page = () => {
   const { setToken} = useAuthStore();
   const { user } = useUser();
   const { getToken } = useAuth();
-  console.log("user:",user);
+  console.log("user id:", typeof  user?.id);
   
   const logToken = async () => {
     // if (user) {
       const mytoken = await getToken();
       setToken(mytoken);
-      console.log(mytoken);
+      
     // }
   };
   useEffect(() => {

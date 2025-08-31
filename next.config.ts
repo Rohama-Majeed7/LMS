@@ -4,11 +4,16 @@ const nextConfig: NextConfig = {
   /* config options here */
   images: {
     domains: [
-      "img.youtube.com", // ✅ allow YouTube thumbnails
-      "img.clerk.com",   // ✅ since you’re also loading Clerk images
+      "img.youtube.com", 
+      "img.clerk.com",
+      "res.cloudinary.com"
     ],
   },
-  
+  api: {
+    bodyParser: {
+      sizeLimit: "10mb", // or larger
+    },
+  },
 };
 
 export default nextConfig;

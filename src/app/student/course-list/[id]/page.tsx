@@ -7,19 +7,16 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
+import { useAuthStore } from "@/store/useAuthStore";
 const Page = () => {
   const { id } = useParams();
-  const [course, setCourse] = useState<Course>();
+  const { course, setCourse } = useAuthStore();
   const rating = course ? calculateRating(course) : 0;
   const [showLectures, setShowLectures] = useState<Record<number, boolean>>({});
   const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
   const [playerData, setPlayerData] = useState<{
     videoId: string | undefined;
   } | null>(null);
-  const fetchCourseDetails = async () => {
-    const course = dummyCourses.find((course) => course._id === id);
-    if (course) setCourse(course);
-  };
 
   const toggleLectures = (index: number) => {
     setShowLectures((prev) => ({
@@ -29,7 +26,12 @@ const Page = () => {
   };
 
   useEffect(() => {
-    fetchCourseDetails();
+    if (id) {
+      if (typeof id === "string") {
+        setCourse(id);
+      }
+      setCourse(id[0]);
+    }
   }, [id]);
 
   return (

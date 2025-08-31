@@ -2,11 +2,16 @@
 import { dummyCourses } from "@/assets/assets";
 import CourseCard from "@/components/student/CourseCard";
 import SearchBar from "@/components/student/SearchBar";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 const page = () => {
   const navigate = useRouter();
+  const { courses, setCourses } = useAuthStore();
+  useEffect(() => {
+    setCourses();
+  }, []);
   return (
     <section className="w-[98vw] max-w-[1050px] mx-auto mt-4">
       <h1 className="text-2xl font-bold">Course List</h1>
@@ -21,7 +26,7 @@ const page = () => {
       </div>
 
       <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 my-6 p-4">
-        {dummyCourses.map((course, idx) => {
+        {courses.map((course, idx) => {
           return <CourseCard key={idx} course={course} />;
         })}
       </div>

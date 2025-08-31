@@ -1,10 +1,16 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { dummyCourses } from "@/assets/assets";
 import CourseCard from "./CourseCard";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const CoursesSection = () => {
+  const { courses, setCourses } = useAuthStore();
+  console.log("courses:", courses);
+  useEffect(() => {
+    setCourses();
+  }, []);
   return (
     <section className="bg-[#F9FAFB] py-12 px-6">
       <div className="max-w-6xl mx-auto text-center">
@@ -22,7 +28,7 @@ const CoursesSection = () => {
 
       {/* Courses Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {dummyCourses.slice(0, 6).map((course, idx) => (
+        {courses.map((course, idx) => (
           <CourseCard course={course} key={idx} />
         ))}
       </div>
