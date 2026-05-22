@@ -30,8 +30,18 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body className=" bg-background">
-        {children}
+      <body className="flex min-h-screen bg-background">
+        {/* Sidebar */}
+        <Sidebar />
+
+        {/* Main Content */}
+        <div className="flex flex-1 flex-col">
+          <Navbar />
+
+          <main className="flex-1 p-6">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
