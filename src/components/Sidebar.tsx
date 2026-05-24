@@ -19,7 +19,7 @@ export default function Sidebar() {
         ].map((item) => (
           <Link
             key={item}
-            href={item === "Dashboard" ? "/" : `/${item.toLowerCase()}`}
+            href={item === "Dashboard" ? "/Dashboard" : `/Dashboard/${item.toLowerCase()}`}
             className="px-3 py-2 rounded-md text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition"
           >
             {item}

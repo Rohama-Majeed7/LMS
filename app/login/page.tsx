@@ -1,8 +1,39 @@
 "use client";
 
+import { login } from "@/src/apis/auth";
 import Link from "next/link";
-
+import React from "react";
 export default function LoginPage() {
+
+  const [formData, setFormData] = React.useState({
+    email: "",
+    password: ""
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    try {
+      const response = await login(formData.email, formData.password);
+      console.log("Login successful:", response);
+      alert(response.message);
+      // Redirect or show success message
+      if(response.user.role === "STUDENT"){
+        window.location.href = "/Dashboard";
+      }
+    } catch (error:any) {
+      console.error("Login failed:", error);
+      alert(error.response?.data?.message || "Login failed. Please try again.");
+      // Show error message to user
+
+    }
+  }
   return (
     <div className="min-h-screen flex">
 
@@ -29,13 +60,16 @@ export default function LoginPage() {
             Login to continue your learning
           </p>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
 
             <div>
               <label className="text-sm text-gray-600">Email</label>
               <input
                 type="email"
                 placeholder="Enter email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 className="w-full mt-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -45,6 +79,9 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="Enter password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 className="w-full mt-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
